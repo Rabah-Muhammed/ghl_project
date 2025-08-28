@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Update Success</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white shadow-xl rounded-2xl p-8 max-w-lg w-full text-center">
+        <h1 class="text-3xl font-bold text-green-600 mb-4">Contact Updated Successfully!</h1>
+
+        <div class="text-gray-700 text-left mb-6 space-y-1">
+            <p><span class="font-semibold">Contact ID:</span> {{ contact_id }}</p>
+            <p><span class="font-semibold">Custom Field ID:</span> {{ custom_field_id }}</p>
+            <p><span class="font-semibold">Custom Field Name:</span> {{ custom_field_name }}</p>
+        </div>
+
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 text-left mb-6">
+            <h2 class="font-semibold text-gray-800 mb-2">Update Response:</h2>
+            <pre class="text-gray-600 whitespace-pre-wrap">{{ update_response|safe }}</pre>
+        </div>
+
+        <div class="flex justify-center gap-4">
+            <a href="{% url 'dashboard' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow">Dashboard</a>
+            <a href="{% url 'update_contact' %}" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow">Update Another Contact</a>
+        </div>
+    </div>
+</body>
+</html>
