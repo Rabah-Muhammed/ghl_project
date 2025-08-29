@@ -1,4 +1,3 @@
-import os
 import random
 from datetime import timedelta
 from urllib.parse import quote_plus
@@ -6,15 +5,11 @@ from urllib.parse import quote_plus
 import requests
 from django.shortcuts import redirect, render
 from django.utils import timezone
-from dotenv import load_dotenv
+from django.conf import settings
 
 from .models import HighLevelToken
 
-load_dotenv()
 
-CLIENT_ID = os.getenv("CLIENT_ID")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-REDIRECT_URI = os.getenv("REDIRECT_URI")
 API_VERSION = "2021-07-28"
 CUSTOM_FIELD_NAME = "DFS Booking Zoom Link"
 
@@ -25,8 +20,8 @@ def oauth_login(request):
     auth_url = (
         "https://marketplace.gohighlevel.com/oauth/chooselocation"
         f"?response_type=code"
-        f"&redirect_uri={quote_plus(REDIRECT_URI)}"
-        f"&client_id={CLIENT_ID}"
+        f"&redirect_uri={quote_plus(settings.REDIRECT_URI)}"
+        f"&client_id={settings.CLIENT_ID}"
         f"&scope={quote_plus(scope)}"
     )
     return redirect(auth_url)
@@ -39,7 +34,7 @@ def oauth_callback(request):
         return render(
             request,
             "redirect_login.html",
-            {"message": "Authorization code not found, please login"},
+            {"message": "Please login"},
         )
 
     url = "https://services.leadconnectorhq.com/oauth/token"
@@ -48,11 +43,11 @@ def oauth_callback(request):
         "Content-Type": "application/x-www-form-urlencoded",
     }
     data = {
-        "client_id": CLIENT_ID,
-        "client_secret": CLIENT_SECRET,
+        "client_id": settings.CLIENT_ID,
+        "client_secret": settings.CLIENT_SECRET,
         "grant_type": "authorization_code",
         "code": code,
-        "redirect_uri": REDIRECT_URI,
+        "redirect_uri": settings.REDIRECT_URI,
         "user_type": "Location",
     }
 
@@ -90,11 +85,11 @@ def refresh_access_token(location_id):
         "Content-Type": "application/x-www-form-urlencoded",
     }
     data = {
-        "client_id": CLIENT_ID,
-        "client_secret": CLIENT_SECRET,
+        "client_id": settings.CLIENT_ID,
+        "client_secret": settings.CLIENT_SECRET,
         "grant_type": "refresh_token",
         "refresh_token": token_obj.refresh_token,
-        "redirect_uri": REDIRECT_URI,
+        "redirect_uri": settings.REDIRECT_URI,
         "user_type": "Location",
     }
 
